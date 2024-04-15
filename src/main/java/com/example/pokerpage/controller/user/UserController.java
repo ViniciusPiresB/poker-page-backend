@@ -1,9 +1,8 @@
-package com.example.pokerpage.controller.User;
+package com.example.pokerpage.controller.user;
 
 import com.example.pokerpage.dto.user.UserCreateDTO;
 import com.example.pokerpage.dto.user.UserDTO;
 import com.example.pokerpage.dto.user.UserUpdateDTO;
-import com.example.pokerpage.models.User;
 import com.example.pokerpage.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
@@ -19,7 +18,7 @@ import java.util.List;
 @RequestMapping("/user")
 @Tag(name = "User")
 public class UserController implements IUserController {
-    public final UserService userService;
+    private final UserService userService;
 
     @PostMapping
     @Transactional

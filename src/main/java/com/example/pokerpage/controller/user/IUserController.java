@@ -1,4 +1,4 @@
-package com.example.pokerpage.controller.User;
+package com.example.pokerpage.controller.user;
 
 import com.example.pokerpage.dto.user.UserCreateDTO;
 import com.example.pokerpage.dto.user.UserDTO;
@@ -17,7 +17,7 @@ public interface IUserController {
     @Operation(summary = "Create user", description = "Create a user in the database")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Creates a user"),
+                    @ApiResponse(responseCode = "201", description = "Creates a user"),
                     @ApiResponse(responseCode = "400", description = "Invalid data", content = @Content(schema = @Schema(hidden = true))),
                     @ApiResponse(responseCode = "403", description = "You do not have permission to access this resource", content = @Content(schema = @Schema(hidden = true))),
                     @ApiResponse(responseCode = "500", description = "An exception occurred", content = @Content(schema = @Schema(hidden = true)))
