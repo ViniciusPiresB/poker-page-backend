@@ -3,6 +3,8 @@ package com.example.pokerpage.service;
 import com.example.pokerpage.dto.user.UserCreateDTO;
 import com.example.pokerpage.dto.user.UserDTO;
 import com.example.pokerpage.dto.user.UserUpdateDTO;
+import com.example.pokerpage.enums.ErrorEnum;
+import com.example.pokerpage.exception.ValidationException;
 import com.example.pokerpage.models.User;
 import com.example.pokerpage.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,6 +53,10 @@ public class UserService {
     }
 
     private User getUser(String nome){
-        return this.userRepository.findByNome(nome);
+        User user = this.userRepository.findByNome(nome);
+
+        if(user == null) throw new ValidationException("User not found", ErrorEnum.NOT_FOUND);
+
+        return user;
     }
 }

@@ -1,8 +1,12 @@
 package com.example.pokerpage.dto.match;
 
+import com.example.pokerpage.models.MatchUser;
+import com.example.pokerpage.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -10,7 +14,9 @@ import lombok.NoArgsConstructor;
 public class MatchDTO {
     private int id;
 
-    private float buy_in;
+    private float buyIn;
 
     private float total;
+
+    private Set<User> userAssoc;
 }

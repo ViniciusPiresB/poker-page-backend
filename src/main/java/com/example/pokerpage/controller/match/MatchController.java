@@ -2,6 +2,7 @@ package com.example.pokerpage.controller.match;
 
 import com.example.pokerpage.dto.match.MatchCreateDTO;
 import com.example.pokerpage.dto.match.MatchDTO;
+import com.example.pokerpage.dto.match_user.MatchUserAddPlayerDTO;
 import com.example.pokerpage.service.MatchService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
@@ -38,6 +39,13 @@ public class MatchController implements IMatchController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id){
         this.matchService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @Transactional
+    @PatchMapping("/add_player")
+    public ResponseEntity<Void> addPlayer(@RequestBody MatchUserAddPlayerDTO matchUserAddPlayerDTO){
+        this.matchService.addPlayer(matchUserAddPlayerDTO);
         return ResponseEntity.ok().build();
     }
 }

@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MatchCreateDTO {
-    private float buy_in;
+    private float buyIn;
 }

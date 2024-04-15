@@ -2,6 +2,7 @@ package com.example.pokerpage.controller.match;
 
 import com.example.pokerpage.dto.match.MatchCreateDTO;
 import com.example.pokerpage.dto.match.MatchDTO;
+import com.example.pokerpage.dto.match_user.MatchUserAddPlayerDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -62,4 +63,16 @@ public interface IMatchController {
             }
     )
     ResponseEntity<Void> delete(@PathVariable int id);
+
+    @Operation(summary = "Add a player in match", description = "Add one player in match with buy-in")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Player added to match"),
+                    @ApiResponse(responseCode = "403", description = "You do not have permission to access this resource", content = @Content(schema = @Schema(hidden = true))),
+                    @ApiResponse(responseCode = "404", description = "Match or player not found", content = @Content(schema = @Schema(hidden = true))),
+                    @ApiResponse(responseCode = "428", description = "Buy in is less than minimum", content = @Content(schema = @Schema(hidden = true))),
+                    @ApiResponse(responseCode = "500", description = "An exception occurred", content = @Content(schema = @Schema(hidden = true)))
+            }
+    )
+    ResponseEntity<Void> addPlayer(@RequestBody MatchUserAddPlayerDTO matchUserAddPlayerDTO);
 }

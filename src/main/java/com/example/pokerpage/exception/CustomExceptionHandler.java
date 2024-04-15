@@ -20,8 +20,8 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<String> handleValidationException(ValidationException ex) {
-        String errorMessage = "Erro: " + ex.getMessage();
-        return ResponseEntity.status(HttpStatus.PRECONDITION_REQUIRED).body(errorMessage);
+        String errorMessage = "Error: " + ex.getMessage();
+        return ResponseEntity.status(ex.getError().getId()).body(errorMessage);
     }
 
     @ExceptionHandler(Exception.class)
