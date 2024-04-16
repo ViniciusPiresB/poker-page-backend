@@ -2,6 +2,7 @@ package com.example.pokerpage.controller.match;
 
 import com.example.pokerpage.dto.match.MatchCreateDTO;
 import com.example.pokerpage.dto.match.MatchDTO;
+import com.example.pokerpage.dto.match.MatchWithUsersDTO;
 import com.example.pokerpage.dto.match_user.MatchUserAddPlayerDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -41,17 +42,17 @@ public interface IMatchController {
     @GetMapping
     ResponseEntity<List<MatchDTO>> list();
 
-    @Operation(summary = "List a match by id", description = "List only one match from the database")
+    @Operation(summary = "List a match by id with players", description = "List only one match with players from the database")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Get a match"),
+                    @ApiResponse(responseCode = "200", description = "Get a match with players"),
                     @ApiResponse(responseCode = "403", description = "You do not have permission to access this resource", content = @Content(schema = @Schema(hidden = true))),
                     @ApiResponse(responseCode = "404", description = "Company not found", content = @Content(schema = @Schema(hidden = true))),
                     @ApiResponse(responseCode = "500", description = "An exception occurred", content = @Content(schema = @Schema(hidden = true)))
             }
     )
     @GetMapping("/{id}")
-    ResponseEntity<MatchDTO> get(@PathVariable int id);
+    ResponseEntity<MatchWithUsersDTO> get(@PathVariable int id);
 
     @Operation(summary = "Delete a match by name", description = "Delete only one match from the database")
     @ApiResponses(
@@ -74,5 +75,5 @@ public interface IMatchController {
                     @ApiResponse(responseCode = "500", description = "An exception occurred", content = @Content(schema = @Schema(hidden = true)))
             }
     )
-    ResponseEntity<Void> addPlayer(@RequestBody MatchUserAddPlayerDTO matchUserAddPlayerDTO);
+    ResponseEntity<Void> addPlayers(@RequestBody MatchUserAddPlayerDTO matchUserAddPlayerDTO);
 }

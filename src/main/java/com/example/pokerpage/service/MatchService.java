@@ -2,8 +2,12 @@ package com.example.pokerpage.service;
 
 import com.example.pokerpage.dto.match.MatchCreateDTO;
 import com.example.pokerpage.dto.match.MatchDTO;
+import com.example.pokerpage.dto.match.MatchWithUsersDTO;
 import com.example.pokerpage.dto.match_user.MatchUserAddPlayerDTO;
+import com.example.pokerpage.dto.match_user.MatchUserDTO;
+import com.example.pokerpage.dto.match_user.UserInMatchDTO;
 import com.example.pokerpage.dto.user.UserDTO;
+import com.example.pokerpage.enums.ErrorEnum;
 import com.example.pokerpage.exception.ValidationException;
 import com.example.pokerpage.models.Match;
 import com.example.pokerpage.models.MatchUser;
@@ -21,11 +25,8 @@ import java.util.stream.Collectors;
 @Service
 public class MatchService {
     private final MatchRepository matchRepository;
-    private final MatchUserRepository matchUserRepository;
-    private final UserService userService;
+    private final MatchUserService matchUserService;
     private final ObjectMapper objectMapper;
-
-
 
     public MatchDTO create(MatchCreateDTO matchCreateDTO){
         Match match = objectMapper.convertValue(matchCreateDTO, Match.class);
@@ -50,24 +51,46 @@ public class MatchService {
     }
 
     public void addPlayer(MatchUserAddPlayerDTO matchUserAddPlayerDTO){
-        String username = matchUserAddPlayerDTO.getUsername();
-        int matchId = matchUserAddPlayerDTO.getMatchId();
-        float buyIn = matchUserAddPlayerDTO.getBuyIn();
+        Match match = this.getMatch(matchUserAddPlayerDTO.getMatchId());
 
-        UserDTO userDTO = this.userService.get(username);
+        this.addMatchUser(match, matchUserAddPlayerDTO.getUsers());
+    }
 
-        User user = this.objectMapper.convertValue(userDTO, User.class);
+    public MatchWithUsersDTO getWithPlayers(int id){
+        Match match = this.getMatch(id);
 
-        Match match = this.matchRepository.getReferenceById(matchId);
+        MatchWithUsersDTO matchWithUsersDTO = this.objectMapper.convertValue(match, MatchWithUsersDTO.class);
 
+        List<UserInMatchDTO> usersInMatch = this.matchUserService.getUsersInMatch(id);
+
+        matchWithUsersDTO.setUsers(usersInMatch);
+
+        return matchWithUsersDTO;
+    }
+
+    private void addMatchUser(Match match, List<UserInMatchDTO> users){
         float minimumBuyIn = match.getBuyIn();
 
-        if(buyIn < minimumBuyIn){
-            throw new ValidationException("ERRO: Buy in é menor que o mínimo da partida");
-        }
+        users.forEach(userInMatch -> {
+            float buyIn = userInMatch.getTotalSpent();
 
-        MatchUser matchUser = new MatchUser(user, match, buyIn);
+            if(buyIn < minimumBuyIn){
+                throw new ValidationException("ERRO: Buy in é menor que o mínimo da partida");
+            }
 
-        this.matchUserRepository.save(matchUser);
+            this.matchUserService.create(userInMatch, match);
+
+            match.setTotal(match.getTotal() + buyIn);
+
+            this.matchRepository.save(match);
+        });
+    }
+
+    private Match getMatch(int id){
+        Match match = this.matchRepository.findById(id);
+
+        if(match == null) throw new ValidationException("Match not found", ErrorEnum.NOT_FOUND);
+
+        return match;
     }
 }

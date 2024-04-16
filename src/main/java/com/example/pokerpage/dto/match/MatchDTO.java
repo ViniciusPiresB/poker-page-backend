@@ -17,6 +17,4 @@ public class MatchDTO {
     private float buyIn;
 
     private float total;
-
-    private Set<User> userAssoc;
 }

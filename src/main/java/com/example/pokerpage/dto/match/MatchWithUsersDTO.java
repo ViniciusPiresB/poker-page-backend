@@ -10,8 +10,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MatchCreateDTO {
+public class MatchWithUsersDTO {
+    private int id;
+
     private float buyIn;
+
+    private float total;
 
     List<UserInMatchDTO> users;
 }
