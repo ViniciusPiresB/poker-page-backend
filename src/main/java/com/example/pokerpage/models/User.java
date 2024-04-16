@@ -19,8 +19,9 @@ public class User {
     private Integer id;
 
     @NotBlank
+    @Column(unique = true)
     private String nome;
 
     @OneToMany
-    private Set<Match> matchAssoc;
+    private Set<Match> matches;
 }

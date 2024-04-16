@@ -1,11 +1,14 @@
 package com.example.pokerpage.exception;
 
 import com.example.pokerpage.enums.ErrorEnum;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
@@ -22,6 +25,12 @@ public class CustomExceptionHandler {
     public ResponseEntity<String> handleValidationException(ValidationException ex) {
         String errorMessage = "Error: " + ex.getMessage();
         return ResponseEntity.status(ex.getError().getId()).body(errorMessage);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex){
+        String errorMessage = "Error: " + ex.getMessage();
+        return ResponseEntity.badRequest().body(errorMessage);
     }
 
     @ExceptionHandler(Exception.class)
