@@ -30,7 +30,13 @@ public class MatchService {
 
     public MatchDTO create(MatchCreateDTO matchCreateDTO){
         Match match = objectMapper.convertValue(matchCreateDTO, Match.class);
+
         Match createdMatch = matchRepository.save(match);
+
+        List<UserInMatchDTO> users = matchCreateDTO.getUsers();
+
+        this.addMatchUser(match, users);
+
         return objectMapper.convertValue(createdMatch, MatchDTO.class);
     }
 
@@ -75,7 +81,7 @@ public class MatchService {
             float buyIn = userInMatch.getTotalSpent();
 
             if(buyIn < minimumBuyIn){
-                throw new ValidationException("ERRO: Buy in é menor que o mínimo da partida");
+                throw new ValidationException(ErrorEnum.ILLEGAL_BUY_IN.getMessage(), ErrorEnum.ILLEGAL_BUY_IN);
             }
 
             this.matchUserService.create(userInMatch, match);
